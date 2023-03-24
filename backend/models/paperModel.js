@@ -1,5 +1,21 @@
 import mongoose from 'mongoose';
 
+const professorReview = mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    status: { type: String, required: true },
+    comment: { type: String, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const paperSchema = mongoose.Schema(
   {
     student: {
@@ -9,13 +25,13 @@ const paperSchema = mongoose.Schema(
     },
     professor: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      required: false,
       ref: 'User',
     },
     subjectName: {
-      type: String,
-      required: true,
-      unique: true,
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: 'Subject',
     },
     filePath: {
       type: String,
@@ -29,9 +45,7 @@ const paperSchema = mongoose.Schema(
     approvedAt: {
       type: Date,
     },
-    comment: {
-      type: String,
-    },
+    comment: [professorReview],
   },
   {
     timestamps: true,

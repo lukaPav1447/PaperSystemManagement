@@ -97,7 +97,7 @@ const AdminPage = ({ history, match }) => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {users.map((user, index) => (
                 <tr key={user._id}>
                   <td>{user._id}</td>
                   <td>{`${user.firstName} ${user.lastName}`}</td>

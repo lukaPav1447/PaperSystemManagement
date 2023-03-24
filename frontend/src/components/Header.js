@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 import { logout } from '../actions/userActions';
 
 const Header = () => {
@@ -27,7 +27,7 @@ const Header = () => {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
-              {userInfo.role === 'admin' ? (
+              {userInfo ? (
                 <LinkContainer to='/'>
                   <Nav.Link onClick={logoutHandler}>
                     <i className='fas fa-user'></i> Logout

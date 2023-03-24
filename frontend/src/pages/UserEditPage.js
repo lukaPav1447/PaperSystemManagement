@@ -87,7 +87,7 @@ const UserEditPage = ({ match, history }) => {
             <Form.Group className='py-3' controlId='lastName'>
               <Form.Label>Last Name</Form.Label>
               <Form.Control
-                type='lastName'
+                type='text'
                 placeholder='Enter your last name'
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}

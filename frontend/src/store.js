@@ -10,6 +10,14 @@ import {
   userDetailsReducer,
   userUpdateReducer,
 } from './reducers/userReducers';
+import {
+  paperCreateReducer,
+  paperDeleteReducer,
+  paperDetailsReducer,
+  paperMyListReducer,
+  paperUpdateReducer,
+} from './reducers/paperReducers';
+import { subjectListReducer } from './reducers/subjectReducer';
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -19,6 +27,12 @@ const reducer = combineReducers({
   userCreate: userCreateReducer,
   userDetails: userDetailsReducer,
   userUpdate: userUpdateReducer,
+  paperMyList: paperMyListReducer,
+  paperCreate: paperCreateReducer,
+  paperDelete: paperDeleteReducer,
+  paperDetails: paperDetailsReducer,
+  paperUpdate: paperUpdateReducer,
+  subjectList: subjectListReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

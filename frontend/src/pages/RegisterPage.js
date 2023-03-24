@@ -50,7 +50,7 @@ const RegisterScreen = ({ history }) => {
         <Form.Group controlId='firstName'>
           <Form.Label>First Name</Form.Label>
           <Form.Control
-            type='firstname'
+            type='text'
             placeholder='Enter your first name'
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
@@ -60,7 +60,7 @@ const RegisterScreen = ({ history }) => {
         <Form.Group className='py-3' controlId='lastName'>
           <Form.Label>Last Name</Form.Label>
           <Form.Control
-            type='lastName'
+            type='text'
             placeholder='Enter your last name'
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}

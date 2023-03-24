@@ -80,7 +80,7 @@ export const userUpdateReducer = (state = { user: {} }, action) => {
     case USER_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     case USER_UPDATE_RESET:
-      return { product: {} };
+      return { user: {} };
     default:
       return state;
   }

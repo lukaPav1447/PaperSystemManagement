@@ -48,4 +48,13 @@ const professor = (req, res, next) => {
   }
 };
 
-export { protect, admin, professor };
+const student = (req, res, next) => {
+  if (req.user && req.user.role === 'student') {
+    next();
+  } else {
+    res.status(401);
+    throw new Error('Not authorized as an student');
+  }
+};
+
+export { protect, admin, professor, student };

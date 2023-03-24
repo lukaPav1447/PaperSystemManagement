@@ -31,7 +31,7 @@ const users = [
     email: 'professor1@example.com',
     password: bcrypt.hashSync('123456', 10),
     role: 'professor',
-    status: 'pending',
+    status: 'approved',
   },
   {
     firstName: 'Nemanja',
@@ -39,7 +39,7 @@ const users = [
     email: 'student1@example.com',
     password: bcrypt.hashSync('123456', 10),
     role: 'student',
-    status: 'pending',
+    status: 'approved',
   },
   {
     firstName: 'Igor',
@@ -47,7 +47,23 @@ const users = [
     email: 'student2@example.com',
     password: bcrypt.hashSync('123456', 10),
     role: 'student',
-    status: 'approved',
+    status: 'pending',
+  },
+  {
+    firstName: 'Anđela',
+    lastName: 'Anđelković',
+    email: 'professor3@example.com',
+    password: bcrypt.hashSync('123456', 10),
+    role: 'professor',
+    status: 'pending',
+  },
+  {
+    firstName: 'Ivana',
+    lastName: 'Ivanović',
+    email: 'student3@example.com',
+    password: bcrypt.hashSync('123456', 10),
+    role: 'student',
+    status: 'pending',
   },
 ];
 

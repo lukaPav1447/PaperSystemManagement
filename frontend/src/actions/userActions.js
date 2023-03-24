@@ -126,11 +126,21 @@ export const listUsers = () => async (dispatch, getState) => {
   }
 };
 
-export const listUserDetails = (id) => async (dispatch) => {
+export const listUserDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_DETAILS_REQUEST });
 
-    const { data } = await axios.get(`/api/users/${id}`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/users/${id}`, config);
 
     dispatch({
       type: USER_DETAILS_SUCCESS,
@@ -178,7 +188,7 @@ export const createUser = () => async (dispatch, getState) => {
       dispatch(logout());
     }
     dispatch({
-      type: USER_UPDATE_FAIL,
+      type: USER_CREATE_FAIL,
       payload: message,
     });
   }
