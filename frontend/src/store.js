@@ -18,6 +18,10 @@ import {
   paperUpdateReducer,
 } from './reducers/paperReducers';
 import { subjectListReducer } from './reducers/subjectReducer';
+import {
+  paperProfessorListReducer,
+  paperProfessorUpdateReducer,
+} from './reducers/paperProfessorReducer';
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -33,6 +37,8 @@ const reducer = combineReducers({
   paperDetails: paperDetailsReducer,
   paperUpdate: paperUpdateReducer,
   subjectList: subjectListReducer,
+  paperProfessorList: paperProfessorListReducer,
+  paperProfessorUpdate: paperProfessorUpdateReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

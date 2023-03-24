@@ -1,27 +1,21 @@
 import React, { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button, Row, Col, Form } from 'react-bootstrap';
+import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Header from '../components/Header';
-import {
-  listMyPapers,
-  createPaper,
-  deletePaper,
-} from '../actions/paperActions';
-import { PAPER_CREATE_RESET } from '../constants/paperConstants';
+import { deletePaper } from '../actions/paperActions';
+import { listProfessorPapers } from '../actions/paperProfessorActions';
 
-const StudentPage = ({ history, match }) => {
+const ProfessorPage = ({ history, match }) => {
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const paperMyList = useSelector((state) => state.paperMyList);
-  const { loading, error, papers } = paperMyList;
-
-  // let filteredPapers = [];
+  const paperProfessorList = useSelector((state) => state.paperProfessorList);
+  const { loading, error, papers } = paperProfessorList;
 
   const paperDelete = useSelector((state) => state.paperDelete);
   const {
@@ -30,30 +24,17 @@ const StudentPage = ({ history, match }) => {
     success: successDelete,
   } = paperDelete;
 
-  const paperCreate = useSelector((state) => state.paperCreate);
-  const {
-    loading: loadingCreate,
-    error: errorCreate,
-    success: successCreate,
-    paper: createdPaper,
-  } = paperCreate;
+  // let filteredPapers = [];
 
   useEffect(() => {
-    dispatch({ type: PAPER_CREATE_RESET });
-
-    if (!userInfo || !(userInfo.role === 'student')) {
+    if (!userInfo || !(userInfo.role === 'professor')) {
       history.push('/');
     }
+    dispatch(listProfessorPapers());
+  }, [dispatch, history, userInfo, successDelete]);
 
-    if (successCreate) {
-      history.push(`/student/paper/${createdPaper._id}/edit`);
-    } else {
-      dispatch(listMyPapers());
-    }
-  }, [dispatch, history, userInfo, successDelete, successCreate, createdPaper]);
-
-  const createUserHandler = () => {
-    dispatch(createPaper());
+  const downloadTableHandler = () => {
+    //CREATE PAPER BILO KOD STUDENTA
   };
 
   const deleteHandler = (id) => {
@@ -88,26 +69,24 @@ const StudentPage = ({ history, match }) => {
           </Form>
         </Col>
       </Row> */}
+      {loadingDelete && <Loader />}
+      {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
       <Row className='align-items-center'>
         <Col>
-          <h1>My Papers</h1>
+          <h1>Student Papers</h1>
         </Col>
         <Col className='text-center'>
-          <h4>{`Welcome Student ${userInfo.firstName}`}</h4>
+          <h4>{`Welcome Professor ${userInfo.firstName}`}</h4>
         </Col>
         <Col
           className='text-right'
           style={{ display: 'flex', justifyContent: 'right' }}
         >
-          <Button className='my-3' onClick={createUserHandler}>
-            <i className='fas fa-plus'></i> Add New Paper
+          <Button className='my-3' onClick={downloadTableHandler}>
+            <i className='fas fa-download'></i> Download Table
           </Button>
         </Col>
       </Row>
-      {loadingDelete && <Loader />}
-      {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
-      {loadingCreate && <Loader />}
-      {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
@@ -119,8 +98,8 @@ const StudentPage = ({ history, match }) => {
               <tr>
                 <th>PAPER ID</th>
                 <th>SUBJECT NAME</th>
-                <th>PROFESSOR NAME</th>
-                <th>PROFESSOR EMAIL</th>
+                <th>STUDENT NAME</th>
+                <th>STUDENT EMAIL</th>
                 <th>FILE PATH</th>
                 <th>STATUS</th>
                 <th>TIME</th>
@@ -134,8 +113,8 @@ const StudentPage = ({ history, match }) => {
                 <tr key={paper._id}>
                   <td>{paper._id}</td>
                   <td>{paper.subjectName.subjectName}</td>
-                  <td>{`${paper.professor.firstName} ${paper.professor.lastName}`}</td>
-                  <td>{paper.professor.email}</td>
+                  <td>{`${paper.student.firstName} ${paper.student.lastName}`}</td>
+                  <td>{paper.student.email}</td>
                   <td>{paper.filePath}</td>
                   <td>
                     {paper.status}{' '}
@@ -158,9 +137,9 @@ const StudentPage = ({ history, match }) => {
                   </td>
                   <td>{paper.createdAt.split('T')[1].split('.')[0]}</td>
                   <td>{paper.createdAt.split('T')[0]}</td>
-                  {paper.status === 'returned' ? (
+                  {paper.status === 'returned' || paper.status === 'pending' ? (
                     <td className='text-center'>
-                      <LinkContainer to={`/student/paper/${paper._id}/edit`}>
+                      <LinkContainer to={`/professor/paper/${paper._id}/edit`}>
                         <Button variant='light' className='btn-sm'>
                           <i className='fas fa-edit'></i>
                         </Button>
@@ -194,4 +173,4 @@ const StudentPage = ({ history, match }) => {
   );
 };
 
-export default StudentPage;
+export default ProfessorPage;

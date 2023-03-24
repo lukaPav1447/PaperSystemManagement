@@ -1,10 +1,12 @@
 import asyncHandler from 'express-async-handler';
 import Paper from '../models/paperModel.js';
+import Subject from '../models/subjectModel.js';
+import User from '../models/userModel.js';
 
 // @desc    Fetch user papers
 // @route   GET /api/papers/mypapers
 // @access  Private/Student
-const getMyPapers = asyncHandler(async (req, res) => {
+const getStudentPapers = asyncHandler(async (req, res) => {
   const papers = await Paper.find({ student: req.user._id })
     .populate('subjectName', 'subjectName')
     .populate('professor', 'firstName lastName email');
@@ -16,10 +18,19 @@ const getMyPapers = asyncHandler(async (req, res) => {
 // @route   POST /api/papers
 // @access  Private/Student
 const createPaper = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  const subjects = await Subject.find({});
+
+  const professors = users.filter((user) => {
+    if (user.status === 'approved' && user.role === 'professor') {
+      return user;
+    }
+  });
+
   const paper = new Paper({
     student: req.user._id,
-    professor: { _id: '641cc923a84d4cdf8dbfda31' },
-    subjectName: { _id: '641cc924a84d4cdf8dbfda3b' },
+    professor: { _id: `${professors[0]._id}` },
+    subjectName: { _id: `${subjects[0]._id}` },
     filePath: '/papers/NewPaper',
     status: 'pending',
   });
@@ -47,7 +58,9 @@ const deletePaper = asyncHandler(async (req, res) => {
 // @route   GET /api/papers/:id
 // @access  Private/Student
 const getPaperById = asyncHandler(async (req, res) => {
-  const paper = await Paper.findById(req.params.id);
+  const paper = await Paper.findById(req.params.id)
+    .populate('student', 'firstName lastName email')
+    .populate('subjectName', 'subjectName');
 
   if (paper) {
     res.json(paper);
@@ -82,4 +95,10 @@ const updatePaper = asyncHandler(async (req, res) => {
   }
 });
 
-export { getMyPapers, createPaper, deletePaper, getPaperById, updatePaper };
+export {
+  getStudentPapers,
+  createPaper,
+  deletePaper,
+  getPaperById,
+  updatePaper,
+};

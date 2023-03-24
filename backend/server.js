@@ -6,6 +6,7 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import paperRoutes from './routes/paperRoutes.js';
 import subjectRoutes from './routes/subjectRoutes.js';
+import paperProfessorRoutes from './routes/paperProfessorRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/papers', paperRoutes);
 app.use('/api/subjects', subjectRoutes);
+app.use('/api/professor', paperProfessorRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

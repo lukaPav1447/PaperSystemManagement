@@ -7,7 +7,9 @@ import AdminPage from './pages/AdminPage';
 import RegisterPage from './pages/RegisterPage';
 import UserEditPage from './pages/UserEditPage';
 import StudentPage from './pages/StudentPage';
-import PaperEditPage from './pages/PaperEditPage';
+import PaperStudentEditPage from './pages/PaperStudentEditPage';
+import ProfessorPage from './pages/ProfessorPage';
+import PaperProfessorEditPage from './pages/PaperProfessorEditPage';
 
 const App = () => {
   return (
@@ -19,7 +21,15 @@ const App = () => {
           <Route path='/admin/user/:id/edit' component={UserEditPage} />
           <Route path='/admin/list' component={AdminPage} />
           <Route path='/student/list' component={StudentPage} />
-          <Route path='/student/paper/:id/edit' component={PaperEditPage} />
+          <Route path='/professor/list' component={ProfessorPage} />
+          <Route
+            path='/student/paper/:id/edit'
+            component={PaperStudentEditPage}
+          />
+          <Route
+            path='/professor/paper/:id/edit'
+            component={PaperProfessorEditPage}
+          />
         </Container>
       </main>
       <Footer />

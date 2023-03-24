@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import {
-  getMyPapers,
+  getStudentPapers,
   createPaper,
   deletePaper,
   getPaperById,
@@ -9,12 +9,12 @@ import {
 } from '../controllers/paperController.js';
 import { protect, student, professor } from '../middleware/authMiddleware.js';
 
-router.route('/mypapers').get(protect, student, getMyPapers);
+router.route('/mypapers').get(protect, student, getStudentPapers);
 router.route('/').post(protect, student, createPaper);
 router
   .route('/:id')
   .get(getPaperById)
-  .delete(protect, student, deletePaper)
+  .delete(protect, deletePaper)
   .put(protect, student, updatePaper);
 
 export default router;
