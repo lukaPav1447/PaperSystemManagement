@@ -29,13 +29,6 @@ const PaperStudentEditPage = ({ match, history }) => {
     success: successUpdate,
   } = paperProfessorUpdate;
 
-  //   const paperUpdate = useSelector((state) => state.paperUpdate);
-  //   const {
-  //     loading: loadingUpdate,
-  //     error: errorUpdate,
-  //     success: successUpdate,
-  //   } = paperUpdate;
-
   useEffect(() => {
     if (successUpdate) {
       dispatch({ type: PAPER_PROFESSOR_UPDATE_RESET });
@@ -66,7 +59,7 @@ const PaperStudentEditPage = ({ match, history }) => {
     <>
       <Row className='py-3'>
         <Col>
-          <Link to='/student/list' className='btn btn-light my-3'>
+          <Link to='/professor/list' className='btn btn-light my-3'>
             Go Back
           </Link>
         </Col>
@@ -91,7 +84,6 @@ const PaperStudentEditPage = ({ match, history }) => {
                 </>
               )}
             </Col>
-            {console.log(paper)}
             <Col>
               <Form onSubmit={submitHandler}>
                 <Form.Group controlId='comment'>
