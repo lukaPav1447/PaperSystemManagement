@@ -41,7 +41,7 @@ const PaperStudentEditPage = ({ match, history }) => {
       dispatch({ type: PAPER_PROFESSOR_UPDATE_RESET });
       history.push('/professor/list');
     } else {
-      if (!paper.subjectName || paper._id !== paperId) {
+      if (!paper.status || paper._id !== paperId) {
         dispatch(listPaperDetails(paperId));
       } else {
         setComment(paper.comment);
@@ -82,9 +82,14 @@ const PaperStudentEditPage = ({ match, history }) => {
         <>
           <Row>
             <Col>
-              <h2>Student Name:</h2>{' '}
-              <h4>{`${paper.student.firstName} ${paper.student.lastName}`}</h4>
-              <h2>Subject:</h2> <h4>{`${paper.subjectName.subjectName}`}</h4>
+              {paper.student && (
+                <>
+                  <h2>Student Name:</h2>
+                  <h4>{`${paper.student.firstName} ${paper.student.lastName}`}</h4>
+                  <h2>Subject:</h2>{' '}
+                  <h4>{`${paper.subjectName.subjectName}`}</h4>
+                </>
+              )}
             </Col>
             {console.log(paper)}
             <Col>

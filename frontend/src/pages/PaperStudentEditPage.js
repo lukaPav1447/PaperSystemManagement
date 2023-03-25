@@ -45,7 +45,7 @@ const PaperStudentEditPage = ({ match, history }) => {
       dispatch({ type: PAPER_UPDATE_RESET });
       history.push('/student/list');
     } else {
-      if (!paper.subjectName || paper._id !== paperId) {
+      if (!paper.status || paper._id !== paperId) {
         dispatch(listPaperDetails(paperId));
         dispatch(listUsers());
         dispatch(listSubjects());
@@ -92,11 +92,12 @@ const PaperStudentEditPage = ({ match, history }) => {
           <Col>
             <h2>Professor review on paper:</h2>
             <Card className='card border-primary mb-3'>
-              {paper.comment.map((comment, index) => (
-                <ListGroup.Item key={index}>
-                  <strong>{comment}</strong>
-                </ListGroup.Item>
-              ))}
+              {paper.comment &&
+                paper.comment.map((comment, index) => (
+                  <ListGroup.Item key={index}>
+                    <strong>{comment}</strong>
+                  </ListGroup.Item>
+                ))}
             </Card>
           </Col>
           <Col>
