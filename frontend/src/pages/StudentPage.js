@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button, Row, Col, Form } from 'react-bootstrap';
+import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -20,8 +20,6 @@ const StudentPage = ({ history, match }) => {
 
   const paperMyList = useSelector((state) => state.paperMyList);
   const { loading, error, papers } = paperMyList;
-
-  // let filteredPapers = [];
 
   const paperDelete = useSelector((state) => state.paperDelete);
   const {
@@ -62,32 +60,9 @@ const StudentPage = ({ history, match }) => {
     }
   };
 
-  // const filterPapers = ({ professorName }) => {
-  //   if (professorName) {
-  //     console.log('PAPERS', papers);
-  //     filteredPapers = papers.filter(
-  //       (p) =>
-  //         p.professor.firstName.search(new RegExp(professorName, 'i')) !== -1
-  //     );
-  //   }
-  // };
-
   return (
     <>
       <Header />
-      {/* <Row className='align-items-center'>
-        <Col>
-          <Form inline>
-            <Form.Control
-              type='text'
-              name='q'
-              onChange={(e) => filterPapers({ professorName: e.target.value })}
-              placeholder='Search Professor first name...'
-              className='mr-sm-2 ml-sm-5'
-            ></Form.Control>
-          </Form>
-        </Col>
-      </Row> */}
       <Row className='align-items-center'>
         <Col>
           <h1>My Papers</h1>
@@ -117,11 +92,10 @@ const StudentPage = ({ history, match }) => {
           <Table striped bordered hover responsive className='table-sm'>
             <thead>
               <tr>
-                <th>PAPER ID</th>
-                <th>SUBJECT NAME</th>
+                <th>#</th>
+                <th>SUBJECT</th>
                 <th>PROFESSOR NAME</th>
                 <th>PROFESSOR EMAIL</th>
-                <th>FILE PATH</th>
                 <th>STATUS</th>
                 <th>TIME</th>
                 <th>DATE</th>
@@ -130,13 +104,12 @@ const StudentPage = ({ history, match }) => {
               </tr>
             </thead>
             <tbody>
-              {papers.map((paper) => (
+              {papers.map((paper, index) => (
                 <tr key={paper._id}>
-                  <td>{paper._id}</td>
+                  <td>{index + 1}</td>
                   <td>{paper.subjectName.subjectName}</td>
                   <td>{`${paper.professor.firstName} ${paper.professor.lastName}`}</td>
                   <td>{paper.professor.email}</td>
-                  <td>{paper.filePath}</td>
                   <td>
                     {paper.status}{' '}
                     {paper.status === 'approved' ? (
@@ -156,8 +129,8 @@ const StudentPage = ({ history, match }) => {
                       ></i>
                     )}
                   </td>
-                  <td>{paper.createdAt.split('T')[1].split('.')[0]}</td>
-                  <td>{paper.createdAt.split('T')[0]}</td>
+                  <td>{paper.updatedAt.split('T')[1].split('.')[0]}</td>
+                  <td>{paper.updatedAt.split('T')[0]}</td>
                   {paper.status === 'returned' ? (
                     <td className='text-center'>
                       <LinkContainer to={`/student/paper/${paper._id}/edit`}>

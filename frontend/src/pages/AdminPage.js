@@ -88,8 +88,8 @@ const AdminPage = ({ history, match }) => {
           <Table striped bordered hover responsive className='table-sm'>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>NAME</th>
+                <th>#</th>
+                <th>FULL NAME</th>
                 <th>EMAIL</th>
                 <th>ROLE</th>
                 <th>STATUS</th>
@@ -99,7 +99,7 @@ const AdminPage = ({ history, match }) => {
             <tbody>
               {users.map((user, index) => (
                 <tr key={user._id}>
-                  <td>{user._id}</td>
+                  <td>{index + 1}</td>
                   <td>{`${user.firstName} ${user.lastName}`}</td>
                   <td>{user.email}</td>
                   <td>{user.role}</td>

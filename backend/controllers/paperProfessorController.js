@@ -5,9 +5,18 @@ import User from '../models/userModel.js';
 
 // @desc    Fetch user papers
 // @route   GET /api/papers/professorpapers
-// @access  Private/Student
+// @access  Private/Professor
 const getProfessorPapers = asyncHandler(async (req, res) => {
-  const papers = await Paper.find({ professor: req.user._id })
+  const keyword = req.query.keyword
+    ? {
+        status: {
+          $regex: req.query.keyword,
+          $options: 'i',
+        },
+      }
+    : {};
+
+  const papers = await Paper.find({ professor: req.user._id, ...keyword })
     .populate('subjectName', 'subjectName')
     .populate('student', 'firstName lastName email');
 

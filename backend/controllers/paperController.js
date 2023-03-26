@@ -27,6 +27,21 @@ const createPaper = asyncHandler(async (req, res) => {
     }
   });
 
+  const updatePaperToDelivered = asyncHandler(async (req, res) => {
+    const paper = await Paper.findById(req.params.id);
+
+    if (paper) {
+      paper.approvedAt = Date.now();
+
+      const updatedPaper = await order.save();
+
+      res.json(updatePaper);
+    } else {
+      res.status(404);
+      throw new Error('Paper not found');
+    }
+  });
+
   const paper = new Paper({
     student: req.user._id,
     professor: { _id: `${professors[0]._id}` },
@@ -84,7 +99,7 @@ const updatePaper = asyncHandler(async (req, res) => {
     paper.professor = professor;
     paper.subjectName = subjectName;
     paper.filePath = filePath;
-    paper.status = status;
+    paper.status = 'pending';
     paper.comment = comment;
 
     const updatedPaper = await paper.save();

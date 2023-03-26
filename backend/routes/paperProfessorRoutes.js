@@ -5,6 +5,7 @@ import {
   getProfessorPapers,
   professorUpdatePaper,
 } from '../controllers/paperProfessorController.js';
+
 import { protect, student, professor } from '../middleware/authMiddleware.js';
 
 router.route('/professorpapers').get(protect, professor, getProfessorPapers);

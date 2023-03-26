@@ -7,46 +7,50 @@ import {
   PAPER_PROFESSOR_UPDATE_REQUEST,
   PAPER_PROFESSOR_UPDATE_SUCCESS,
   PAPER_PROFESSOR_UPDATE_FAIL,
-  PAPER_PROFESSOR_UPDATE_RESET,
 } from '../constants/paperProfessorConstants';
 import { logout } from './userActions';
 
-export const listProfessorPapers = () => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: PAPER_PROFESSOR_MY_LIST_REQUEST,
-    });
+export const listProfessorPapers =
+  (keyword = '') =>
+  async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: PAPER_PROFESSOR_MY_LIST_REQUEST,
+      });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
 
-    const { data } = await axios.get(`/api/professor/professorpapers`, config);
+      const { data } = await axios.get(
+        `/api/professor/professorpapers?keyword=${keyword}`,
+        config
+      );
 
-    dispatch({
-      type: PAPER_PROFESSOR_MY_LIST_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout());
+      dispatch({
+        type: PAPER_PROFESSOR_MY_LIST_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === 'Not authorized, token failed') {
+        dispatch(logout());
+      }
+      dispatch({
+        type: PAPER_PROFESSOR_MY_LIST_FAIL,
+        payload: message,
+      });
     }
-    dispatch({
-      type: PAPER_PROFESSOR_MY_LIST_FAIL,
-      payload: message,
-    });
-  }
-};
+  };
 
 export const updateProfessorPaper = (paper) => async (dispatch, getState) => {
   try {

@@ -19,7 +19,6 @@ const paperSchema = mongoose.Schema(
     },
     filePath: {
       type: String,
-      required: true,
     },
     status: {
       type: String,

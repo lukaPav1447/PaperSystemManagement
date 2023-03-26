@@ -21,7 +21,8 @@ const App = () => {
           <Route path='/admin/user/:id/edit' component={UserEditPage} />
           <Route path='/admin/list' component={AdminPage} />
           <Route path='/student/list' component={StudentPage} />
-          <Route path='/professor/list' component={ProfessorPage} />
+          <Route path='/search/:keyword' component={ProfessorPage} />
+          <Route path='/professor/list' component={ProfessorPage} exact />
           <Route
             path='/student/paper/:id/edit'
             component={PaperStudentEditPage}

@@ -115,6 +115,7 @@ const PaperStudentEditPage = ({ match, history }) => {
                 paper.comment.map((comment, index) => (
                   <ListGroup.Item key={index}>
                     <strong>{comment}</strong>
+                    {console.log('Poslije petlje: ', paper.comment)}
                   </ListGroup.Item>
                 ))}
             </Card>
@@ -135,6 +136,7 @@ const PaperStudentEditPage = ({ match, history }) => {
                     ) {
                       return (
                         <option
+                          key={user._id}
                           value={user._id}
                         >{`${user.firstName}  ${user.lastName}`}</option>
                       );
@@ -153,6 +155,7 @@ const PaperStudentEditPage = ({ match, history }) => {
                   {subjects.map((subject) => {
                     return (
                       <option
+                        key={subject._id}
                         value={subject._id}
                       >{`${subject.subjectName}`}</option>
                     );
@@ -169,8 +172,8 @@ const PaperStudentEditPage = ({ match, history }) => {
                   onChange={(e) => setFilePath(e.target.value)}
                 ></Form.Control>
                 <Form.File
+                  className='py-3'
                   id='pdf-file'
-                  label='Choose File'
                   custom
                   onChange={uploadFileHandler}
                 ></Form.File>
@@ -178,7 +181,7 @@ const PaperStudentEditPage = ({ match, history }) => {
               </Form.Group>
 
               <Button type='submit' variant='primary'>
-                Update
+                Send Paper
               </Button>
             </Form>
           </Col>

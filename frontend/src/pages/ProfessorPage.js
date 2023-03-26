@@ -9,6 +9,8 @@ import { deletePaper } from '../actions/paperActions';
 import { listProfessorPapers } from '../actions/paperProfessorActions';
 
 const ProfessorPage = ({ history, match }) => {
+  const keyword = match.params.keyword;
+
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -24,17 +26,30 @@ const ProfessorPage = ({ history, match }) => {
     success: successDelete,
   } = paperDelete;
 
-  // let filteredPapers = [];
-
   useEffect(() => {
     if (!userInfo || !(userInfo.role === 'professor')) {
       history.push('/');
     }
-    dispatch(listProfessorPapers());
-  }, [dispatch, history, userInfo, successDelete]);
+    dispatch(listProfessorPapers(keyword));
+  }, [dispatch, history, userInfo, successDelete, keyword]);
 
-  const downloadTableHandler = () => {
-    //CREATE PAPER BILO KOD STUDENTA
+  const exportHandler = () => {
+    let data = papers.map((paper) => [
+      paper.student.firstName + ' ' + paper.student.lastName,
+      paper.subjectName.subjectName,
+      paper.student.email,
+      paper.updatedAt.split('T')[1].split('.')[0],
+      paper.updatedAt.split('T')[0],
+      paper.status,
+    ]);
+    let csvContent =
+      'data:text/csv;charset=utf-8,' + data.map((e) => e.join(',')).join('\n');
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'my_data.csv');
+    document.body.appendChild(link);
+    link.click();
   };
 
   const deleteHandler = (id) => {
@@ -43,32 +58,9 @@ const ProfessorPage = ({ history, match }) => {
     }
   };
 
-  // const filterPapers = ({ professorName }) => {
-  //   if (professorName) {
-  //     console.log('PAPERS', papers);
-  //     filteredPapers = papers.filter(
-  //       (p) =>
-  //         p.professor.firstName.search(new RegExp(professorName, 'i')) !== -1
-  //     );
-  //   }
-  // };
-
   return (
     <>
       <Header />
-      {/* <Row className='align-items-center'>
-        <Col>
-          <Form inline>
-            <Form.Control
-              type='text'
-              name='q'
-              onChange={(e) => filterPapers({ professorName: e.target.value })}
-              placeholder='Search Professor first name...'
-              className='mr-sm-2 ml-sm-5'
-            ></Form.Control>
-          </Form>
-        </Col>
-      </Row> */}
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
       <Row className='align-items-center'>
@@ -82,8 +74,8 @@ const ProfessorPage = ({ history, match }) => {
           className='text-right'
           style={{ display: 'flex', justifyContent: 'right' }}
         >
-          <Button className='my-3' onClick={downloadTableHandler}>
-            <i className='fas fa-download'></i> Download Table
+          <Button className='my-3' onClick={exportHandler}>
+            <i className='fas fa-download'></i> Export to .xls
           </Button>
         </Col>
       </Row>
@@ -96,26 +88,26 @@ const ProfessorPage = ({ history, match }) => {
           <Table striped bordered hover responsive className='table-sm'>
             <thead>
               <tr>
-                <th>PAPER ID</th>
-                <th>SUBJECT NAME</th>
+                <th>#</th>
                 <th>STUDENT NAME</th>
+                <th>SUBJECT</th>
                 <th>STUDENT EMAIL</th>
-                <th>FILE PATH</th>
-                <th>STATUS</th>
                 <th>TIME</th>
                 <th>DATE</th>
+                <th>STATUS</th>
                 <th></th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {papers.map((paper) => (
+              {papers.map((paper, index) => (
                 <tr key={paper._id}>
-                  <td>{paper._id}</td>
-                  <td>{paper.subjectName.subjectName}</td>
+                  <td>{index + 1}</td>
                   <td>{`${paper.student.firstName} ${paper.student.lastName}`}</td>
+                  <td>{paper.subjectName.subjectName}</td>
                   <td>{paper.student.email}</td>
-                  <td>{paper.filePath}</td>
+                  <td>{paper.updatedAt.split('T')[1].split('.')[0]}</td>
+                  <td>{paper.updatedAt.split('T')[0]}</td>
                   <td>
                     {paper.status}{' '}
                     {paper.status === 'approved' ? (
@@ -135,8 +127,6 @@ const ProfessorPage = ({ history, match }) => {
                       ></i>
                     )}
                   </td>
-                  <td>{paper.createdAt.split('T')[1].split('.')[0]}</td>
-                  <td>{paper.createdAt.split('T')[0]}</td>
                   {paper.status === 'returned' || paper.status === 'pending' ? (
                     <td className='text-center'>
                       <LinkContainer to={`/professor/paper/${paper._id}/edit`}>
@@ -147,7 +137,7 @@ const ProfessorPage = ({ history, match }) => {
                     </td>
                   ) : (
                     <td className='text-center'>
-                      <LinkContainer to={`/student/paper/${paper._id}/edit`}>
+                      <LinkContainer to={`/professor/paper/${paper._id}/edit`}>
                         <Button disabled variant='dark' className='btn-sm'>
                           <i className='fas fa-edit'></i>
                         </Button>

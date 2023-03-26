@@ -1,34 +1,34 @@
 const papers = [
   {
-    filePath: '/papers/projekat1.pdf',
+    filePath: '/uploadspdf-1679866633052.pdf',
     status: 'returned',
   },
   {
-    filePath: '/papers/matematika.pdf',
+    filePath: '/uploadspdf-1679866633052.pdf',
     status: 'pending',
   },
   {
-    filePath: '/papers/struja.pdf',
+    filePath: '/uploadspdf-1679866633052.pdf',
     status: 'approved',
   },
   {
-    filePath: '/papers/trening.pdf',
+    filePath: '/uploadspdf-1679866633052.pdf',
     status: 'pending',
   },
   {
-    filePath: '/papers/mreze.pdf',
+    filePath: '/uploadspdf-1679866633052.pdf',
     status: 'returned',
   },
   {
-    filePath: '/papers/projekat2.pdf',
+    filePath: '/uploadspdf-1679866633052.pdf',
     status: 'pending',
   },
   {
-    filePath: '/papers/mat.pdf',
+    filePath: '/uploadspdf-1679866633052.pdf',
     status: 'approved',
   },
   {
-    filePath: '/papers/trening.pdf',
+    filePath: '/uploadspdf-1679866633052.pdf',
     status: 'pending',
   },
 ];

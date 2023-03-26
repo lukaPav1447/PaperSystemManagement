@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
-import { pageNavigationPlugin } from '@react-pdf-viewer/page-navigation';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-import '@react-pdf-viewer/page-navigation/lib/styles/index.css';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  ListGroup,
+  Card,
+  Container,
+} from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -76,26 +81,16 @@ const PaperStudentEditPage = ({ match, history }) => {
         <>
           <Row>
             <Col>
-              {/* <div className='App'>
-                <hr />
-                <h4>All Pages</h4>
-                <div className='all-page-container'>
-                  <AllPagesPDFViewer pdf={paper.filePath} />
-                </div>
-                <hr />
-              </div> */}
-
-              <div>
+              <Container style={{ overflow: 'auto', height: '530px' }}>
                 <Worker
                   workerUrl={`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.js`}
                 >
                   <Viewer
                     fileUrl={paper.filePath}
-                    defaultScale={SpecialZoomLevel.PageFit}
-                    plugins={[defaultLayoutPlugin]}
+                    // defaultScale={SpecialZoomLevel.PageFit}
                   />
                 </Worker>
-              </div>
+              </Container>
             </Col>
             <Col>
               {paper.student && (
@@ -107,9 +102,22 @@ const PaperStudentEditPage = ({ match, history }) => {
                 </>
               )}
               <hr />
+              <h2>Last comments you wrote:</h2>
+              <Card className='card border-primary mb-3'>
+                {paper.comment &&
+                  paper.comment.map((comment, index) => (
+                    <ListGroup.Item key={index}>
+                      <strong>
+                        {index + 1} {`.${comment}`}
+                      </strong>
+                    </ListGroup.Item>
+                  ))}
+              </Card>
+              <hr />
+
               <Form onSubmit={submitHandler}>
                 <Form.Group controlId='comment'>
-                  <Form.Label>Comment on Paper:</Form.Label>
+                  <Form.Label>Comment on paper:</Form.Label>
                   <Form.Control
                     as='textarea'
                     row='3'
@@ -118,13 +126,12 @@ const PaperStudentEditPage = ({ match, history }) => {
                 </Form.Group>
 
                 <Form.Group className='py-3' controlId='status'>
-                  <Form.Label>Change Status: </Form.Label>
+                  <Form.Label>Change paper status: </Form.Label>
                   <Form.Control
                     as='select'
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                   >
-                    <option value=''>Choose status</option>
                     <option value='approved'>Approved</option>
                     <option value='pending'>Pending</option>
                     <option value='returned'>Returned</option>
@@ -132,7 +139,7 @@ const PaperStudentEditPage = ({ match, history }) => {
                 </Form.Group>
 
                 <Button type='submit' variant='primary'>
-                  Update
+                  Send review
                 </Button>
               </Form>
             </Col>
