@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import { pageNavigationPlugin } from '@react-pdf-viewer/page-navigation';
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import '@react-pdf-viewer/page-navigation/lib/styles/index.css';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import FormContainer from '../components/FormContainer';
 import { updateProfessorPaper } from '../actions/paperProfessorActions';
 import { listPaperDetails } from '../actions/paperActions';
 import { PAPER_PROFESSOR_UPDATE_RESET } from '../constants/paperProfessorConstants';
@@ -23,11 +27,7 @@ const PaperStudentEditPage = ({ match, history }) => {
   const paperProfessorUpdate = useSelector(
     (state) => state.paperProfessorUpdate
   );
-  const {
-    loading: loadingUpdate,
-    error: errorUpdate,
-    success: successUpdate,
-  } = paperProfessorUpdate;
+  const { error: errorUpdate, success: successUpdate } = paperProfessorUpdate;
 
   useEffect(() => {
     if (successUpdate) {
@@ -67,6 +67,7 @@ const PaperStudentEditPage = ({ match, history }) => {
           <h1>Review Paper</h1>
         </Col>
       </Row>
+      {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
@@ -74,6 +75,28 @@ const PaperStudentEditPage = ({ match, history }) => {
       ) : (
         <>
           <Row>
+            <Col>
+              {/* <div className='App'>
+                <hr />
+                <h4>All Pages</h4>
+                <div className='all-page-container'>
+                  <AllPagesPDFViewer pdf={paper.filePath} />
+                </div>
+                <hr />
+              </div> */}
+
+              <div>
+                <Worker
+                  workerUrl={`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.js`}
+                >
+                  <Viewer
+                    fileUrl={paper.filePath}
+                    defaultScale={SpecialZoomLevel.PageFit}
+                    plugins={[defaultLayoutPlugin]}
+                  />
+                </Worker>
+              </div>
+            </Col>
             <Col>
               {paper.student && (
                 <>
@@ -83,11 +106,10 @@ const PaperStudentEditPage = ({ match, history }) => {
                   <h4>{`${paper.subjectName.subjectName}`}</h4>
                 </>
               )}
-            </Col>
-            <Col>
+              <hr />
               <Form onSubmit={submitHandler}>
                 <Form.Group controlId='comment'>
-                  <Form.Label>Comment on Paper</Form.Label>
+                  <Form.Label>Comment on Paper:</Form.Label>
                   <Form.Control
                     as='textarea'
                     row='3'
@@ -96,7 +118,7 @@ const PaperStudentEditPage = ({ match, history }) => {
                 </Form.Group>
 
                 <Form.Group className='py-3' controlId='status'>
-                  <Form.Label>Status: </Form.Label>
+                  <Form.Label>Change Status: </Form.Label>
                   <Form.Control
                     as='select'
                     value={status}

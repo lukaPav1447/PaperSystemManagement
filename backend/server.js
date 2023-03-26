@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import colors from 'colors';
@@ -7,6 +8,7 @@ import userRoutes from './routes/userRoutes.js';
 import paperRoutes from './routes/paperRoutes.js';
 import subjectRoutes from './routes/subjectRoutes.js';
 import paperProfessorRoutes from './routes/paperProfessorRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -18,6 +20,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/papers', paperRoutes);
 app.use('/api/subjects', subjectRoutes);
 app.use('/api/professor', paperProfessorRoutes);
+app.use('/api/upload', uploadRoutes);
+
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 app.use(notFound);
 app.use(errorHandler);

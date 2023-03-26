@@ -1,10 +1,10 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Button, Row, Col, ListGroup, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import FormContainer from '../components/FormContainer';
 import { listPaperDetails, updatePaper } from '../actions/paperActions';
 import { listUsers } from '../actions/userActions';
 import { listSubjects } from '../actions/subjectActions';
@@ -16,7 +16,7 @@ const PaperStudentEditPage = ({ match, history }) => {
   const [professor, setProfessor] = useState({});
   const [subjectName, setSubjectName] = useState('');
   const [filePath, setFilePath] = useState('');
-  const [message, setMessage] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -31,14 +31,10 @@ const PaperStudentEditPage = ({ match, history }) => {
   } = paperUpdate;
 
   const userList = useSelector((state) => state.userList);
-  const { loading: loadingUsers, error: errorUsers, users } = userList;
+  const { users } = userList;
 
   const subjectList = useSelector((state) => state.subjectList);
-  const {
-    loading: loadingSubjects,
-    error: errorSubjects,
-    subjects,
-  } = subjectList;
+  const { subjects } = subjectList;
 
   useEffect(() => {
     if (successUpdate) {
@@ -56,6 +52,29 @@ const PaperStudentEditPage = ({ match, history }) => {
       }
     }
   }, [dispatch, history, paperId, paper, successUpdate]);
+
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('pdf', file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      const { data } = await axios.post('/api/upload', formData, config);
+
+      setFilePath(data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -145,10 +164,17 @@ const PaperStudentEditPage = ({ match, history }) => {
                 <Form.Label>File Path</Form.Label>
                 <Form.Control
                   type='text'
-                  placeholder='Enter email'
+                  placeholder='Enter file url'
                   value={filePath}
                   onChange={(e) => setFilePath(e.target.value)}
                 ></Form.Control>
+                <Form.File
+                  id='pdf-file'
+                  label='Choose File'
+                  custom
+                  onChange={uploadFileHandler}
+                ></Form.File>
+                {uploading && <Loader />}
               </Form.Group>
 
               <Button type='submit' variant='primary'>
